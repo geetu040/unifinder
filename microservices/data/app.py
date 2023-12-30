@@ -5,8 +5,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-   print("Ready")
-   return "Ready"
+   print("Application is All Set")
+   return "Application is All Set"
 
 # ====> ENDPOINT FOR COURSE SEARCH
 
