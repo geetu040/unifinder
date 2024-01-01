@@ -1,4 +1,5 @@
 from flask import Flask, request
+import numpy as np
 from db import get_distinct_col, search
 
 app = Flask(__name__)
