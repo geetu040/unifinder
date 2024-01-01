@@ -42,4 +42,4 @@ jobs:
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-        publish-profile: ${{ secrets.UNIFINDER_FUNCTION_PUBLISH_PROFILE }}
+        publish-profile: ${{ secrets.AZURE_FUNCTION_APP_UNIFINDER_CONTACT_PUBLISH_PROFILE }}
