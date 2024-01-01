@@ -1,65 +1,21 @@
-# This workflow will build and push a Python application to an Azure Web App when a commit is pushed to your default branch.
-#
-# This workflow assumes you have already created the target Azure App Service web app.
-# For instructions see https://docs.microsoft.com/en-us/azure/app-service/quickstart-python?tabs=bash&pivots=python-framework-flask
-#
-# To configure this workflow:
-#
-# 1. Download the Publish Profile for your Azure Web App. You can download this file from the Overview page of your Web App in the Azure Portal.
-#    For more information: https://docs.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=applevel#generate-deployment-credentials
-#
-# 2. Create a secret in your repository named AZURE_WEBAPP_PUBLISH_PROFILE, paste the publish profile contents as the value of the secret.
-#    For instructions on obtaining the publish profile see: https://docs.microsoft.com/azure/app-service/deploy-github-actions#configure-the-github-secret
-#
-# 3. Change the value for the AZURE_WEBAPP_NAME. Optionally, change the PYTHON_VERSION environment variables below.
-#
-# For more information on GitHub Actions for Azure: https://github.com/Azure/Actions
-# For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
-
-name: Deploy React Application on Azure App Service Web App
-
-env:
-  AZURE_WEBAPP_NAME: unifinder-website  # set this to the name of your Azure Web App
-  AZURE_WEBAPP_PACKAGE_PATH: website
-  NODE_VERSION: '20'
+name: Deploy React website on Azure Static Web Apps CI/CD
 
 on:
   push:
-    branches: [ "main", "website" ]
-  workflow_dispatch:
-
-permissions:
-  contents: read
+    branches:
+      - main
 
 jobs:
-  deploy:
-    permissions:
-      contents: none
+  build_and_deploy_job:
     runs-on: ubuntu-latest
-
-    environment: dev
+    name: Build and Deploy Job
     steps:
+      - uses: actions/checkout@v3
 
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Build And Deploy
+        uses: Azure/static-web-apps-deploy@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: React Build
-        run: |
-          cd website
-          npm install
-          npm run build
-          tree .
-
-      # - name: 'Deploy to Azure Web App'
-      #   id: deploy-to-webapp
-      #   uses: azure/webapps-deploy@v2
-      #   with:
-      #     app-name: ${{ env.AZURE_WEBAPP_NAME }}
-      #     publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-      #     package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_APP_SERVICE_STATIC_WEB_APP_UNIFINDER_WEBSITE }}
+          action: "upload"
+          app_location: "website"
+          output_location: "build"
