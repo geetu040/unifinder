@@ -53,7 +53,7 @@ jobs:
         run: |
           cd website
           npm install
-          npm build
+          npm run build
           tree .
 
       # - name: 'Deploy to Azure Web App'
