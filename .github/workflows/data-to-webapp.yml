@@ -66,14 +66,10 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
-      - name: TEST
-        run: tree .
-      
-      # - name: 'Deploy to Azure Web App'
-      #   uses: azure/webapps-deploy@v2
-      #   id: deploy-to-webapp
-      #   with:
-      #     app-name: 'unifinder-data'
-      #     slot-name: 'production'
-      #     publish-profile: ${{ secrets.AzureAppService_PublishProfile_3f7157013ad84c5bb0024e0a430f30e3 }}
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v2
+        id: deploy-to-webapp
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_APP_SERVICE_WEB_APP_UNIFINDER_DATA_PUBLISH_PROFILE }}
           
