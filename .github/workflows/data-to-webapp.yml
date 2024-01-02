@@ -43,17 +43,19 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Create and start virtual environment
+      - name: Apply venv and zip the content
         run: |
-          cd microservices/data
-          tree .
+          cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
           zip release.zip ./* -r
-          pwd
-          ls
-          cd ..
-          ls
 
-
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        id: deploy-to-webapp
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_APP_SERVICE_WEB_APP_UNIFINDER_DATA_PUBLISH_PROFILE }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/release.zip
+  
