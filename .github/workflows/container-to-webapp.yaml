@@ -56,8 +56,8 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: unifinder-auth
-          images: ghcr.io/geetu040/unifinder-auth
+          app-name: unifinder-data
+          images: ghcr.io/geetu040/unifinder-data
 
 
 
