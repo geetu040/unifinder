@@ -36,8 +36,6 @@
     transform: rotate(360deg);
   }
 }
-<<<<<<< HEAD
-=======
 
 .nav-links ul li a {
 	color: #fff;
@@ -444,4 +442,3 @@ h3 {
 nav > a > img {
 	width: 100px;
 }
->>>>>>> aedd7da (Set up React Frontend)
