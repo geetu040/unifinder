@@ -14,7 +14,7 @@ app.add_middleware(
 @app.get('/')
 def index():
     print("Application is All Set")
-    return "Application is All Set"
+    return "Application is Good"
 
 # ====> ENDPOINT FOR COURSE SEARCH
 
