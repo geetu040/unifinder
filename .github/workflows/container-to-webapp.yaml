@@ -2,7 +2,7 @@ name: auth and data to Docker Images to GHCR to Azure Web App
 
 on:
   push:
-    branches: ['main', 'fixer']
+    branches: ['main']
 
 jobs:
 
