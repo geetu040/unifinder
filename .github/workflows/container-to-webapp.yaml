@@ -4,6 +4,9 @@ on:
   push:
     branches: ['dev']
 
+env:
+  V: 1
+
 jobs:
 
   # BUILD AND PUSH TO GHCR
@@ -20,8 +23,8 @@ jobs:
 
       - name: unifinder-auth
         run: |
-          docker build -t ghcr.io/geetu040/unifinder-auth microservices/auth/
-          docker push ghcr.io/geetu040/unifinder-auth
+          docker build -t ghcr.io/geetu040/unifinder-auth:${{env.V}} microservices/auth/
+          docker push ghcr.io/geetu040/unifinder-auth:${{env.V}}
 
   data-build-to-ghcr:
     runs-on: ubuntu-latest
@@ -35,8 +38,8 @@ jobs:
 
       - name: unifinder-data
         run: |
-          docker build -t ghcr.io/geetu040/unifinder-data microservices/data/
-          docker push ghcr.io/geetu040/unifinder-data
+          docker build -t ghcr.io/geetu040/unifinder-data:${{env.V}} microservices/data/
+          docker push ghcr.io/geetu040/unifinder-data:${{env.V}}
 
   # UPLOAD TO APP SERVICE
 
@@ -54,7 +57,7 @@ jobs:
         with:
           app-name: unifinder-auth
           publish-profile: ${{ secrets.AZURE_APP_SERVICE_WEB_APP_UNIFINDER_AUTH_PUBLISH_PROFILE }}
-          images: ghcr.io/geetu040/unifinder-auth
+          images: ghcr.io/geetu040/unifinder-auth:${{env.V}}
 
   data-deploy-to-appservice:
     runs-on: ubuntu-latest
@@ -70,4 +73,4 @@ jobs:
         with:
           app-name: unifinder-data
           publish-profile: ${{ secrets.AZURE_APP_SERVICE_WEB_APP_UNIFINDER_DATA_PUBLISH_PROFILE }}
-          images: ghcr.io/geetu040/unifinder-data
+          images: ghcr.io/geetu040/unifinder-data:${{env.V}}
