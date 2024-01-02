@@ -1,0 +1,36 @@
+name: auth and data to Docker Images to GHCR to Azure Web App
+
+on:
+  push:
+    branches: ['main', 'fixer']
+
+jobs:
+  auth-build-to-ghcr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: unifinder-auth
+        run: |
+          docker build -t ghcr.io/geetu040/unifinder-auth:v0 microservices/auth/
+          docker push ghcr.io/geetu040/unifinder-auth:v0
+
+  data-build-to-ghcr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: unifinder-data
+        run: |
+          docker build -t ghcr.io/geetu040/unifinder-data:v0 microservices/data/
+          docker push ghcr.io/geetu040/unifinder-data:v0
