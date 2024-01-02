@@ -8,41 +8,41 @@ jobs:
 
   # BUILD AND PUSH TO GHCR
 
-  auth-build-to-ghcr:
-    runs-on: ubuntu-latest
+  # auth-build-to-ghcr:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v4
 
-      - name: Login to GitHub Container Registry
-        run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+  #     - name: Login to GitHub Container Registry
+  #       run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: unifinder-auth
-        run: |
-          docker build -t ghcr.io/geetu040/unifinder-auth microservices/auth/
-          docker push ghcr.io/geetu040/unifinder-auth
+  #     - name: unifinder-auth
+  #       run: |
+  #         docker build -t ghcr.io/geetu040/unifinder-auth microservices/auth/
+  #         docker push ghcr.io/geetu040/unifinder-auth
 
-  data-build-to-ghcr:
-    runs-on: ubuntu-latest
+  # data-build-to-ghcr:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v4
 
-      - name: Login to GitHub Container Registry
-        run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+  #     - name: Login to GitHub Container Registry
+  #       run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: unifinder-data
-        run: |
-          docker build -t ghcr.io/geetu040/unifinder-data microservices/data/
-          docker push ghcr.io/geetu040/unifinder-data
+  #     - name: unifinder-data
+  #       run: |
+  #         docker build -t ghcr.io/geetu040/unifinder-data microservices/data/
+  #         docker push ghcr.io/geetu040/unifinder-data
 
   # UPLOAD TO APP SERVICE
 
   auth-deploy-to-appservice:
     runs-on: ubuntu-latest
-    needs: auth-build-to-ghcr
+    # needs: auth-build-to-ghcr
 
     steps:
       - name: Checkout Repository
