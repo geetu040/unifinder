@@ -422,3 +422,14 @@ h3 {
 nav > a > img {
 	width: 100px;
 }
+
+.searchInput {
+	padding: 8px;
+	margin-right: 8px;
+	border: 1px solid #ccc;
+  }
+  
+  .searchButton {
+	padding: 8px;
+	cursor: pointer;
+  }

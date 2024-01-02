@@ -30,7 +30,7 @@ export default function About() {
           <img src='/images/favicon.png' alt="" />
         </Link>
           <div className="nav-links" id="navLinks">
-            <i className="fa-solid fa fa-xmark" onclick={hideMenu}></i>
+            <i className="fa-solid fa fa-xmark" onClick={hideMenu}></i>
             <ul>
               <li><Link to="/">HOME</Link></li>
               <li><Link to="/about">ABOUT</Link></li>
@@ -38,7 +38,7 @@ export default function About() {
               <li><Link to="/contact">CONTACT</Link></li>
             </ul>
           </div>
-          <i className="fa-solid fa fa-bars" onclick={showMenu}></i>
+          <i className="fa-solid fa fa-bars" onClick={showMenu}></i>
         </nav>
         <h1>About Us</h1>
       </section>
