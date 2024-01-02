@@ -1,0 +1,73 @@
+name: auth and data to Docker Images to GHCR to Azure Web App
+
+on:
+  push:
+    branches: ['dev']
+
+jobs:
+
+  # BUILD AND PUSH TO GHCR
+
+  auth-build-to-ghcr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: unifinder-auth
+        run: |
+          docker build -t ghcr.io/geetu040/unifinder-auth microservices/auth/
+          docker push ghcr.io/geetu040/unifinder-auth
+
+  data-build-to-ghcr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: unifinder-data
+        run: |
+          docker build -t ghcr.io/geetu040/unifinder-data microservices/data/
+          docker push ghcr.io/geetu040/unifinder-data
+
+  # UPLOAD TO APP SERVICE
+
+  auth-deploy-to-appservice:
+    runs-on: ubuntu-latest
+    needs: auth-build-to-ghcr
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        id: deploy-to-auth
+        with:
+          app-name: unifinder-auth
+          publish-profile: ${{ secrets.AZURE_APP_SERVICE_WEB_APP_UNIFINDER_AUTH_PUBLISH_PROFILE }}
+          images: ghcr.io/geetu040/unifinder-auth
+
+  data-deploy-to-appservice:
+    runs-on: ubuntu-latest
+    needs: data-build-to-ghcr
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        id: deploy-to-data
+        with:
+          app-name: unifinder-data
+          publish-profile: ${{ secrets.AZURE_APP_SERVICE_WEB_APP_UNIFINDER_DATA_PUBLISH_PROFILE }}
+          images: ghcr.io/geetu040/unifinder-data
