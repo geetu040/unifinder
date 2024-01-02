@@ -45,7 +45,13 @@ jobs:
     needs: auth-build-to-ghcr
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v1.4.6
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
