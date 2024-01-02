@@ -53,5 +53,7 @@ jobs:
           zip release.zip ./* -r
           pwd
           ls
+          cd ..
+          ls
 
 
