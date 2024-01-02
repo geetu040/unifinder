@@ -48,17 +48,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Azure login
-        uses: azure/login@v1.4.6
-        with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+      # - name: Azure login
+      #   uses: azure/login@v1.4.6
+      #   with:
+      #     creds: '${{ secrets.AZURE_CREDENTIALS }}'
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
-        id: deploy-to-webapp
+        id: deploy-to-auth
         with:
-          app-name: unifinder-data
-          images: ghcr.io/geetu040/unifinder-data
+          app-name: unifinder-auth
+          publish-profile: ${{ secrets.AZURE_APP_SERVICE_WEB_APP_UNIFINDER_AUTH_PUBLISH_PROFILE }}
+          images: ghcr.io/geetu040/unifinder-auth
 
 
 
