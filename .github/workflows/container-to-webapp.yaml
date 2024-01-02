@@ -5,7 +5,7 @@ on:
     branches: ['dev']
 
 env:
-  V: 1
+  V: v2
 
 jobs:
 
