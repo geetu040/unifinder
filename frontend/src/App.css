@@ -361,13 +361,15 @@ h3 {
 	width: 80vw;
 
 }
+
 .university-col {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 }
-.university-col > img {
+
+.university-col>img {
 	height: 200px;
 	width: 250px;
 }
@@ -384,6 +386,7 @@ h3 {
 	margin: auto;
 	margin-bottom: 120px;
 }
+
 .program {
 	width: 100%;
 	margin-top: 120px;
@@ -392,26 +395,31 @@ h3 {
 	justify-content: center;
 	align-items: center;
 }
-.program > h1 {
+
+.program>h1 {
 	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
-.program > h3 {
+
+.program>h3 {
 	font-family: cursive;
 	color: #555;
 }
-.program > img {
+
+.program>img {
 	width: 90%;
 	max-height: 800px;
 	border-radius: 20px;
 	margin-bottom: 30px;
 }
-.program > p {
+
+.program>p {
 	font-weight: 500;
 	color: #222;
 	font-size: large;
 	margin-bottom: 20px;
 }
-.program > a {
+
+.program>a {
 	background-color: rgb(104, 147, 255);
 	color: white;
 	text-decoration: none;
@@ -419,7 +427,8 @@ h3 {
 	border-radius: 10px;
 
 }
-nav > a > img {
+
+nav>a>img {
 	width: 100px;
 }
 
@@ -427,9 +436,16 @@ nav > a > img {
 	padding: 8px;
 	margin-right: 8px;
 	border: 1px solid #ccc;
-  }
-  
-  .searchButton {
+}
+
+.searchButton {
 	padding: 8px;
 	cursor: pointer;
-  }
+}
+
+.card-container {
+	margin-top: 20px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+}

@@ -1,80 +1,76 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Footer from '../components/Footer';
-import { Link } from 'react-router-dom';
-import SearchBar from '../components/SearchBar';
+import SubHeader from '../components/SubHeader';
 
 export default function Universities() {
 
-    let navLinks = document.getElementById("navLinks");
-    const showMenu = () => {
-        navLinks.style.top = '0';
-    }
-    const hideMenu = () => {
-        navLinks.style.top = '-800px'
-    }
-
-    const subHeaderStyles = {
-        height: '50vh',
-        width: '100%',
-        backgroundImage: `linear-gradient(rgba(4, 9, 30, 0.7), rgba(4, 9, 30, 0.7)), url(${process.env.PUBLIC_URL}/images/background.jpg)`,
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        textAlign: 'center',
-        color: '#fff',
-    };
+    const [data, setData] = useState();
+    const [notFound, setNotFound] = useState();
 
     const handleSearch = async (searchTerm) => {
         try {
-            // You can replace the URL below with the actual API endpoint
-            const apiUrl = `https://unifinder-data.azurewebsites.net/search?query=${encodeURIComponent(searchTerm)}`;
-      
+
+            // fetching data based on the user input
+            const apiUrl = `http://localhost:8000/search?query=${encodeURIComponent(searchTerm)}`;
+
             const response = await fetch(apiUrl, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
+                method: 'GET',
             });
-      
+
+            // error handling
             if (!response.ok) {
-              throw new Error('Network response was not ok');
+                alert("Server is not responding!");
+                throw new Error('Network response was not ok');
             }
-      
-            const data = await response.json();
-            console.log(data);
+
+            const temp = await response.json();
+
+            // if an empty array is returned from the server
+            if (temp.length === 0) {
+                setNotFound(true);
+            }
+            else {
+                setNotFound(false);
+            }
+
+            setData(temp);
+            console.log(temp);
+
         } catch (error) {
             console.error('Error:', error.message);
-          }
+        }
     };
 
     return (
         <>
-            <section className="sub-header" style={subHeaderStyles}>
-                <nav>
-                    <Link to="/">
-                        <img src='/images/favicon.png' alt="" />
-                    </Link>
-                    <div className="nav-links" id="navLinks">
-                        <i className="fa-solid fa fa-xmark" onClick={hideMenu}></i>
-                        <ul>
-                            <li><Link to="/">HOME</Link></li>
-                            <li><Link to="/about">ABOUT</Link></li>
-                            <li><Link to="/universities">UNIVERSITIES</Link></li>
-                            <li><Link to="/contact">CONTACT</Link></li>
-                        </ul>
-                    </div>
-                    <i className="fa-solid fa fa-bars" onClick={showMenu}></i>
-                </nav>
-                <h1>Universities</h1>
-                <SearchBar onSearch={handleSearch} />
-            </section>
-
-            
+            <SubHeader page="Universities" onSearch={handleSearch} />
 
             <div className="programs">
 
+                {/* display the results is data is returned from the server */}
+                {data && (
+                    <div className="card-container">
+                        {data.map((item, index) => (
+                            <div className="course-col" key={index}>
+                                <h3>{item.program}</h3>
+                                <h4>{item.institute}</h4>
+                                <p>{item.description}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {/* if no results are returned */}
+                {notFound && (
+                    <div>
+                        <h4 style={{marginTop: "10px"}}>Unfortunately, we could not find what you were looking for.</h4>
+
+                    </div>
+                )}
             </div>
 
             <Footer />
         </>
     )
 }
+

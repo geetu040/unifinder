@@ -1,17 +1,19 @@
-// SearchBar.js
 import React, { useState } from 'react';
 
 const SearchBar = ({ onSearch }) => {
     const [searchTerm, setSearchTerm] = useState('');
 
+    // setting the state on eavery change in the search bar
     const handleInputChange = (event) => {
         setSearchTerm(event.target.value);
     };
 
+    // calling the function which sends a fetch request
     const handleSearch = () => {
         onSearch(searchTerm);
     };
 
+    // searching with the help of the enter key
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             handleSearch();
@@ -19,7 +21,7 @@ const SearchBar = ({ onSearch }) => {
     };
 
     return (
-        <div>
+        <div style={{marginTop: '20px'}}>
             <input
                 className='searchInput'
                 type="text"

@@ -1,14 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-let navLinks = document.getElementById("navLinks");
-const showMenu = () => {
-  navLinks.style.top = '0';
-}
-const hideMenu = () => {
-  navLinks.style.top = '-800px'
-}
-
+// defining some styles for the header
 const headerStyles = {
   minHeight: '100vh',
   width: '100%',
@@ -19,9 +12,27 @@ const headerStyles = {
 };
 
 function Header() {
+
+ // showing the menu
+ const showMenu = () => {
+  const navLinks = document.getElementById("navLinks");
+  if (navLinks) {
+    navLinks.style.top = '0';
+  }
+}
+
+// hiding the menu
+const hideMenu = () => {
+  const navLinks = document.getElementById("navLinks");
+  if (navLinks) {
+    navLinks.style.top = '-800px';
+  }
+}
   return (
     <section className="header" style={headerStyles}>
       <nav>
+
+        {/* logo icon */}
         <Link to="/">
           <img src='/images/favicon.png' alt="" />
         </Link>
@@ -34,7 +45,9 @@ function Header() {
             <li><Link to="/contact">CONTACT</Link></li>
           </ul>
         </div>
-        <i className="fa-solid fa fa-bars" onClick={showMenu}></i>
+
+        {/* a menu navbar for smaller screens */}
+        <i className="fa-solid fa fa-bars" onClick={showMenu}>Menu</i>
       </nav>
       <div className="text-box">
         <h1>Empowering Your Educational Journey: Discover Your Ideal University</h1>
