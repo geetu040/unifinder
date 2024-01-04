@@ -1,0 +1,106 @@
+name: Deploy Website and Microservices on Azure
+
+on:
+  push:
+    branches: [ "main", "readme" ]
+
+jobs:
+
+  # ---> Job 1: Deploy React on Static Web App - App Service
+
+  react-to-staticwebapp:
+    runs-on: ubuntu-latest
+    name: Deploy React on Static Web App - App Service
+    steps:
+      - uses: actions/checkout@v4
+
+      # deploy react code on azure static web app
+      - name: Build And Deploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_APP_SERVICE_STATIC_WEB_APP_UNIFINDER_WEBSITE_TOKEN }}
+          action: "upload"
+          app_location: "website"
+          output_location: "build"
+
+  # ---> Job 2: Deploy Node js on Function App
+
+  build-and-deploy:
+    runs-on: ubuntu-latest # Use ubuntu-latest for Linux
+    name: Deploy Node js on Function App
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 'Run Azure Functions Action'
+        uses: Azure/functions-action@v1
+        id: fa
+        with:
+          app-name: unifinder-function
+          package: microservices/contact
+          publish-profile: ${{ secrets.AZURE_FUNCTION_APP_UNIFINDER_CONTACT_PUBLISH_PROFILE }}
+
+  # ---> Job 3: Build and Push PHP Docker Image on GHCR
+
+  auth-build-to-ghcr:
+    runs-on: ubuntu-latest
+    name: Build and Push PHP Docker Image on GHCR
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: unifinder-auth
+        run: |
+          docker build -t ghcr.io/geetu040/unifinder-auth microservices/auth/
+          docker push ghcr.io/geetu040/unifinder-auth
+
+  # ---> Job 4: Build and Push Python FastAPI Docker Image on GHCR
+
+  data-build-to-ghcr:
+    runs-on: ubuntu-latest
+    name: Build and Push Python FastAPI Docker Image on GHCR
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: unifinder-data
+        run: |
+          docker build -t ghcr.io/geetu040/unifinder-data microservices/data/
+          docker push ghcr.io/geetu040/unifinder-data
+
+  # ---> Job 5: Upload PHP Docker Image from GHCR to Web App - App Service
+
+  auth-deploy-to-appservice:
+    runs-on: ubuntu-latest
+    name: Upload PHP Docker Image from GHCR to Web App - App Service
+    needs: auth-build-to-ghcr
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        id: deploy-to-auth
+        with:
+          app-name: unifinder-auth
+          publish-profile: ${{ secrets.AZURE_APP_SERVICE_WEB_APP_UNIFINDER_AUTH_PUBLISH_PROFILE }}
+          images: ghcr.io/geetu040/unifinder-auth
+
+  # ---> Job 6: Upload Python FastAPI Docker Image from GHCR to Web App - App Service
+
+  data-deploy-to-appservice:
+    runs-on: ubuntu-latest
+    needs: data-build-to-ghcr
+    name: Upload Python FastAPI Docker Image from GHCR to Web App - App Service
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        id: deploy-to-data
+        with:
+          app-name: unifinder-data
+          publish-profile: ${{ secrets.AZURE_APP_SERVICE_WEB_APP_UNIFINDER_DATA_PUBLISH_PROFILE }}
+          images: ghcr.io/geetu040/unifinder-data
